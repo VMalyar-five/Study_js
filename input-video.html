@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video-input</title>
+    <style>
+        .style_video{
+            margin-top: 50px;
+        }
+        .video{
+            width: 400px;
+            height: 200px;
+        }
+        .flex-btn{
+            margin-top: 50px;
+            display: none;
+            align-items: center;
+            justify-content: space-evenly;   
+        }
+    </style>
+</head>
+<body>
+    <p>Input URL</p>
+    <input type="text">
+    <br>
+    <div class="style_video">
+        <video src=""></video>
+    </div>
+    
+    <div class="flex-btn" id="controls">
+        <button name="play">Stop</button>
+        <button name="quiter">-</button>
+        <span>Volume</span>
+        <button name="louder">+</button>
+    </div>
+
+
+    <script>
+        let input = document.querySelector('input');
+        let video = document.getElementsByTagName('video')[0];
+        let buttons = document.querySelector('.flex-btn');
+        let btnPlay = document.querySelector('[name="play"]');
+        let btnQuiter = document.getElementsByName('quiter')[0];
+        let btnLouder = document.getElementsByName('louder')[0];        
+
+        input.addEventListener('keyup', this.readInputValue);
+                
+        function readInputValue(e) {  
+            if (e.keyCode == 13) {
+                video.src = input.value;
+                buttons.style.display = 'flex';
+            }               
+        };  
+        const getPlay = () => {
+            if (btnPlay.innerHTML == 'Play'){
+                video.pause();
+                btnPlay.innerHTML = 'Stop';
+                alert(`Video stopes at time:  ${video.currentTime}`);
+            } else{
+                btnPlay.innerHTML = 'Play';
+                video.play();                
+            }   
+        };
+        const getQuiterVolume = () => {
+            video.volume > 0.2            
+                ? video.volume -= 0.2
+                : alert('Volume absent!');
+        };
+        const getLouderVolume = () => {
+            video.volume < 1 
+                ? video.volume += 0.2
+                : alert('Тhe loudest!');
+        };
+        
+        btnPlay.addEventListener('click', getPlay);
+        btnQuiter.addEventListener('click', getQuiterVolume);
+        btnLouder.addEventListener('click', getLouderVolume);
+    </script>
+</body>
+</html>
