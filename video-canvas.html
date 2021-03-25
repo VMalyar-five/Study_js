@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas</title>
+    <style>
+        .flex-btns{
+            margin-top: 10px;
+            display: none;
+            align-items: center;
+            justify-content: space-evenly;   
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <canvas class="img-canvas" width="300" height="200"></canvas>
+    <p>Inpute your URL</p>
+    <input type="text" style='display: block;'>
+    <!-- https://player.vimeo.com/external/342177837.sd.mp4?s=d3d03805e3c00a503ddc6b1832b2219de7eba472&profile_id=139&oauth2_token_id=57447761 -->
+    <br>
+    <canvas width="400" height="200" class="video-canvas"></canvas>
+    <div class="flex-btns" id="controls">
+        <button name="play">Stop</button>
+        <button name="quiter">-</button>
+        <span>Volume</span>
+        <button name="louder">+</button>
+    </div>
+    
+       
+
+    <script>        
+        let [ctx1, ctx2] = document.querySelectorAll('canvas');
+        let canvasImage = ctx1.getContext('2d');
+        let canvasVideo = ctx2.getContext('2d');
+        let input  = document.querySelector('input');       
+        let button = document.querySelector('[name="play"]');
+        let btnQuiter = document.getElementsByName('quiter')[0];
+        let btnLouder = document.getElementsByName('louder')[0];
+
+        let video = document.createElement('video');
+        
+        let img1 = document.createElement('img');
+        img1.src = 'https://miro.medium.com/max/1838/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg';
+        ctx1.prepend(img1);
+        img1.onload = function () {
+            canvasImage.drawImage(img1, 0, 0, 300, 200);
+        } 
+
+
+        input.addEventListener('keyup', this.readInputValue);
+        video.oncanplaythrough = setInterval(readyToPlayVideo, 17);
+        video.autoplay = true;
+        button.addEventListener('click', getPlay);      
+ 
+        function readInputValue(e){
+            // if key -> 'Enter'
+            if (e.keyCode === 13 ) {                
+                video.src = input.value;
+                document.querySelector('.flex-btns').style.display = 'flex';      
+            }          
+        }
+        function readyToPlayVideo(){
+            video.width = '400px';
+            video.height = '200px';
+            canvasVideo.drawImage(video, 0, 0, 400, 200);      
+        }
+        function getPlay () {
+            if (button.innerHTML === 'Play'){
+                video.pause();
+                button.innerHTML = 'Stop';
+            } else{
+                button.innerHTML = 'Play';
+                video.play();                
+            }   
+        };
+        const getQuiterVolume = () => {
+            video.volume > 0.2            
+                ? video.volume -= 0.2
+                : alert('Volume absent!');
+        };
+        const getLouderVolume = () => {
+            video.volume < 1 
+                ? video.volume += 0.2
+                : alert('Тhe loudest!');
+        };
+        
+        btnQuiter.addEventListener('click', getQuiterVolume);
+        btnLouder.addEventListener('click', getLouderVolume);
+
+    </script>
+</body>
+</html>
